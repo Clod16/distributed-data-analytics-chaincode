@@ -16,4 +16,12 @@ func getDDAKey(stub shim.ChaincodeStubInterface, id string, egid string) (string
 	} else {
 		return ddaKey, nil
 	}
+
 }
+
+
+
+func BytesToString(data []byte) string {
+	return string(data[:])
+}
+

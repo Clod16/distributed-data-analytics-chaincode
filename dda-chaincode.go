@@ -91,29 +91,181 @@ func (t *DistributedDataAnalyticsChaincode) Invoke(stub shim.ChaincodeStubInterf
 		return t.getEdgeGateways(stub, isEnabled)
 	} else if function == "getEdgeGatewaysByEgid" {
 		return t.getEdgeGatewaysByEgid(stub, isEnabled, args)
-	} else if function == "deleteEdgeGatewaysByEgid" {
-		return t.deleteEdgeGatewaysByEgid(stub, isEnabled, args)
+	} else if function == "deleteEdgeGateways" {
+		return t.deleteEdgeGateways(stub, isEnabled, args)
 	}
 	return shim.Error("Invalid invoke function name")
 }
+func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstancesByEgid(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
+	var err error
+	if(args[0]){
+		return shim.Error(err.Error())
+	}else{
+		return shim.Success(nil)
+	}
+}
+func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstances(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
+	var err error
+	if(args[0]){
+		return shim.Error(err.Error())
+	}else{
+		return shim.Success(nil)
+	}
+}
+func (t *DistributedDataAnalyticsChaincode) createDataSources(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
+	var err error
+	if(args[0]){
+		return shim.Error(err.Error())
+	}else{
+		return shim.Success(nil)
+	}
+}
+func (t *DistributedDataAnalyticsChaincode) deleteDataSources(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
+	var err error
+	if(args[0]){
+		return shim.Error(err.Error())
+	}else{
+		return shim.Success(nil)
+	}
+}
+func (t *DistributedDataAnalyticsChaincode) getDataSources(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
+	var err error
+	if(args[0]){
+		return shim.Error(err.Error())
+	}else{
+		return shim.Success(nil)
+	}
+}
+func (t *DistributedDataAnalyticsChaincode) getDataSources(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
+	var err error
+	if(args[0]){
+		return shim.Error(err.Error())
+	}else{
+		return shim.Success(nil)
+	}
+}
+func (t *DistributedDataAnalyticsChaincode) getDataSourcesbyId(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
+	var err error
+	if(args[0]){
+		return shim.Error(err.Error())
+	}else{
+		return shim.Success(nil)
+	}
+}
+func (t *DistributedDataAnalyticsChaincode) createEdgeGateways(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
+	var err error
+	if(args[0]){
+		return shim.Error(err.Error())
+	}else{
+		return shim.Success(nil)
+	}
+}
+func (t *DistributedDataAnalyticsChaincode) updateEdgeGateways(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
+	var err error
+	if(args[0]){
+		return shim.Error(err.Error())
+	}else{
+		return shim.Success(nil)
+	}
+}
+func (t *DistributedDataAnalyticsChaincode) getEdgeGateways(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
+	var err error
+	if(args[0]){
+		return shim.Error(err.Error())
+	}else{
+		return shim.Success(nil)
+	}
+}
+func (t *DistributedDataAnalyticsChaincode) getEdgeGatewaysByEgid(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
+	var err error
+	if(args[0]){
+		return shim.Error(err.Error())
+	}else{
+		return shim.Success(nil)
+	}
+}
+func (t *DistributedDataAnalyticsChaincode) deleteEdgeGateways(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
+	var err error
+	if(args[0]){
+		return shim.Error(err.Error())
+	}else{
+		return shim.Success(nil)
+	}
+}
+
+
+func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstancesById(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
+
+	logger.info(" getAnalyticsInstancesById()\n")
+	var analyticsArrayString []string
+	if len(args) != 1{
+		return shim.Error("delateAnalyticsInstances() ERROR: wrong argument" )
+	}
+	DDAPartialKey = args[0]
+	analyticsArrayBytes, err := stub.GetStateByPartialCompositeKey("FE_Analytics_Instances" , DDAPartialKey)
+	if err != nil{
+		return shim.Error("GetStateByPartialCompositeKey() ERROR:" , err.Error())
+	}
+
+	for( i=1, i<len(analyticsArrayBytes), i++){
+
+		payloadByte := analyticsArrayBytes[i]
+		payload := BytesToString(payloadByte)
+		analytics := new(AnalitycsInstances)
+		analytics.Id = args[0]
+		analytics.Payload = payload
+		analyticsJson,err := json.Marshal(analytics)
+		if err != nil{
+			return shim.Error("json.Marshal() ERROR: ", err.Error())
+		}
+		analyticsArrayString = append(analyticsArray, analyticsJson)		
+	}
+	logger.Info("Query Response:\n", analyticsArrayString)
+
+	return shim.Success(analyticsArrayBytes)
+
+}
+func (t *DistributedDataAnalyticsChaincode) delateAnalyticsInstances(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
+
+	logger.info(" delateAnalyticsInstances()\n")
+
+	if len(args) != 2{
+		return shim.Error("delateAnalyticsInstances() ERROR: wrong argument" )
+	}
+
+	DDAKey , err := getDDAKey(stub, args[0], args[1])
+	if err != nil{
+		return shim.Error("CreateCompositeKey() ERROR: ", err.Error())
+	}
+
+	err := stub.DelState(DDAKey)
+	if err != nil{
+		return shim.Error("DelState() ERROR", err.Error()) 
+	}
+
+	return shim.Success(nil)
+
+}
+
+
 func (t *DistributedDataAnalyticsChaincode) updateAnalyticsInstancesstub(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
 
 	var analytics AnalitycsInstances
 	logger.info(" updateAnalyticsInstancesstub()\n")
 
 	if len(args) != 3{
-		return shim.Error("updateAnalyticsInstancesstub() ERROR: must exactly 3 args!!! ")
+		return shim.Error("updateAnalyticsInstancesstub() ERROR: wrong argument")
 	}
 
-	DDAKey, err := getDDAKey(stub, args[0], args[1]){
+	DDAKey, err := getDDAKey(stub, args[0], args[2]){
 		if err != nil{
-			return shim.Error("CreateCompositeKey() ERROR: "err.Error())
+			return shim.Error("CreateCompositeKey() ERROR: ", err.Error())
 		}
 	}
 
 	DDABytes, err := stub.GetState(DDAKey)
 	if err!= nil{
-		return shim.Error("GetState() ERROR: " err.Error())
+		return shim.Error("GetState() ERROR: ", err.Error())
 	}
 	
 	err := json.Unmarshal([]byte(DDABytes), &analytics)
@@ -125,23 +277,21 @@ func (t *DistributedDataAnalyticsChaincode) updateAnalyticsInstancesstub(shim.Ch
 	analytics.Payload = newPayload
 	err :=stub.PutState(DDAKey, newPayload)
 	if err != nil{
-		return shim.Error("PutState() ERROR: " err.Error())
+		return shim.Error("PutState() ERROR: ", err.Error())
 	}
 	jsonDDA, err := json.Marshal(&analytics)
 	if err != nil{
-		return shim.Error("json.Marshal() ERROR: " err.Error())
+		return shim.Error("json.Marshal() ERROR: ", err.Error())
 	}
 	err := setDDAEvent(stub, jsonDDA)
 	if err != nil{
-		return shim.Error(" setEvent() ERROR: " err.Error())
+		return shim.Error(" setEvent() ERROR: ", err.Error())
 	}
 
 	return shim.Success(nil)
-
-
-
-
 }
+
+
 func (t *DistributedDataAnalyticsChaincode) createAnalyticsInstances(stub shim.ChaincodeStubInterface, isEnabled bool, args []string) {
 
 	var analytics AnalitycsInstances
@@ -169,13 +319,13 @@ func (t *DistributedDataAnalyticsChaincode) createAnalyticsInstances(stub shim.C
 
 	DDAKey, err := getDDAKey(stub, analytcsID, analytcsEGID)
 	if err!= nil{
-		return shim.Error("CreateCompositeKey() ERROR: "err.Error())
+		return shim.Error("CreateCompositeKey() ERROR: ",err.Error())
 	}
 
 
 	err :=stub.PutState(DDAKey, payload)
 	if err != nil{
-		return shim.Error("PutState() ERROR: " err.Error())
+		return shim.Error("PutState() ERROR: " ,err.Error())
 	}
 
 	analyticsEvent.Id = analytcsID
@@ -183,16 +333,17 @@ func (t *DistributedDataAnalyticsChaincode) createAnalyticsInstances(stub shim.C
 	analyticsEvent.Payload = payload
 	jsonDDA, err := json.Marshal(&analyticsEvent)
 	if err != nil{
-		return shim.Error("json.Marshal() ERROR: " err.Error())
+		return shim.Error("json.Marshal() ERROR: ", err.Error())
 	}
 	err := setDDAEvent(stub, jsonDDA)
 	if err != nil{
-		return shim.Error(" setEvent() ERROR: " err.Error())
+		return shim.Error(" setEvent() ERROR: ", err.Error())
 	}
 
 	return shim.Success([]byte(jsonDDA))
 
 }
+
 
 func main() {
 	twc := new(DistributedDataAnalyticsChaincode)

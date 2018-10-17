@@ -136,6 +136,7 @@ func (t *DistributedDataAnalyticsChaincode) updateAnalyticsInstancesstub(shim.Ch
 		return shim.Error(" setEvent() ERROR: " err.Error())
 	}
 
+	return shim.Success(nil)
 
 
 
@@ -189,6 +190,7 @@ func (t *DistributedDataAnalyticsChaincode) createAnalyticsInstances(stub shim.C
 		return shim.Error(" setEvent() ERROR: " err.Error())
 	}
 
+	return shim.Success([]byte(jsonDDA))
 
 }
 

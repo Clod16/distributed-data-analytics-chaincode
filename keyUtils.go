@@ -2,14 +2,24 @@
 
 package main
 
-import "github.com/hyperledger/fabric/core/chaincode/shim"
+import (
+	"encoding/gob"
+	"bytes"
+	"github.com/hyperledger/fabric/core/chaincode/shim"
+)
 
-func setDDAEvent(stub shim.ChaincodeStubInterface, json string) (error){
-	err:= stub.SetEvent("FE_Analytics_Instances", json)
+
+func setAnalytcsEvent(stub shim.ChaincodeStubInterface, input string) (error){
+	strs := []string{}
+	strs = append(strs, input)
+	buf := &bytes.Buffer{}
+    gob.NewEncoder(buf).Encode(strs)
+    bs := buf.Bytes()
+	err:= stub.SetEvent("FE_Analytics_Instances", bs)
 	return err
 	
 }
-func getDDAKey(stub shim.ChaincodeStubInterface, id string, egid string) (string, error) {
+func getAnalyticsKey(stub shim.ChaincodeStubInterface, id string, egid string) (string, error) {
 	ddaKey, err := stub.CreateCompositeKey("FE_Analytics_Instances:", []string{id, egid})
 	if err != nil {
 		return "", err

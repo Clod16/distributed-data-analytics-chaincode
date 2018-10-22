@@ -53,4 +53,3 @@ func isInvokerOperator(stub shim.ChaincodeStubInterface, attrName string) (bool,
 	}
 	return found, attrValue, nil
 }
- 

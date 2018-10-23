@@ -392,28 +392,43 @@ func (t *DistributedDataAnalyticsChaincode) updateEdgeGateways(stub shim.Chainco
 
 }
 func (t *DistributedDataAnalyticsChaincode) getEdgeGateways(stub shim.ChaincodeStubInterface, isEnabled bool, args []string) pb.Response {
-	var err error
-	if(args[0]){
-		return shim.Error(err.Error())
-	}else{
-		return shim.Success(nil)
-	}
+	
+
 }
 func (t *DistributedDataAnalyticsChaincode) getEdgeGatewaysByEgid(stub shim.ChaincodeStubInterface, isEnabled bool, args []string) pb.Response {
-	var err error
-	if(args[0]){
-		return shim.Error(err.Error())
-	}else{
-		return shim.Success(nil)
-	}
+
+
 }
 func (t *DistributedDataAnalyticsChaincode) deleteEdgeGateways(stub shim.ChaincodeStubInterface, isEnabled bool, args []string)pb.Response {
-	var err error
-	if(args[0]){
-		return shim.Error(err.Error())
-	}else{
-		return shim.Success(nil)
+	
+	logger.Info(" deleteEdgeGateways()\n")
+
+	if len(args) != 2{
+		logger.Error("deleteEdgeGateways() ERROR: wrong argument \n")
+		return shim.Error("deleteEdgeGateways() ERROR: wrong argument" )
 	}
+
+	DDAKey , err := getEdgeKey(stub, args[0])
+	if err != nil{
+		logger.Error("DelStCreateCompositeKeyate() ERROR \n")
+		return shim.Error("CreateCompositeKey() ERROR: " +err.Error())
+	}
+
+	err1 := stub.DelState(DDAKey)
+	if err1 != nil{
+		logger.Error("DelState() ERROR \n")
+		return shim.Error("DelState() ERROR" +err1.Error()) 
+	}
+	stringEvent :=  "Data Sources deleted with key: " +DDAKey
+	err2 := setAnalytcsEvent(stub, stringEvent )
+	if err2 != nil{
+		return shim.Error(" setEvent() ERROR: " +err2.Error())
+	}	
+	logger.Info("deleteEdgeGateways() --- Success\n")
+	return shim.Success(nil)
+
+	}
+
 } 
 
 func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstances(stub shim.ChaincodeStubInterface, isEnabled bool) pb.Response {
@@ -425,7 +440,7 @@ func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstances(stub shim.Chai
 	var dataArrayString  []string
 	dataResponse, err := stub.GetStateByPartialCompositeKey("FE_Analytics_Instances",emptyArgs)
 	if err != nil{
-		logger.Error(" GetStateByPartialCompositeKey() ERROR:\n")
+		logger.Error(" GetStateByPartialCompositeKey() ERROR\n")
 		return shim.Error(err.Error())
 	}
 	for dataResponse.HasNext(){
@@ -443,8 +458,10 @@ func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstances(stub shim.Chai
 	stringEvent := " getAnalyticsInstances Event :" +dataArrayString
 	err2 := setAnalytcsEvent(stub, stringEvent )
 	if err2 != nil{
+		logger.Error(" GetStateByPartialCompositeKey() ERROR:\n")
 		return shim.Error(" setEvent() ERROR: " +err2.Error())
 	}	
+	logger.Info(" getAnalyticsInstancesByIdByEgid() --- Success \n")
 	return shim.Success(bufByte)
 
 	
@@ -481,6 +498,7 @@ func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstancesByIdByEgid(stub
 	if err2 != nil{
 		return shim.Error(" setEvent() ERROR: " +err2.Error())
 	}	
+	logger.Info(" getAnalyticsInstancesByIdByEgid() --- Success \n")
 	return shim.Success(bufByte)
 
 	
@@ -511,6 +529,7 @@ func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstancesById(stub shim.
 		payloadByte := dataArray.Value
 		payload := BytesToString(payloadByte)
 		dataArrayString = append(dataArrayString, payload)
+		logger.Info(dataArrayString)
 		buf :=&bytes.Buffer{}
 		gob.NewEncoder(buf).Encode(dataArrayString)
 		bufByte = buf.Bytes()
@@ -519,8 +538,11 @@ func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstancesById(stub shim.
 	stringEvent := "getAnalyticsInstancesById Event :" +dataArrayString
 	err2 := setAnalytcsEvent(stub, stringEvent )
 	if err2 != nil{
+		logger.Error(" setEvent() ERROR:\n")
 		return shim.Error(" setEvent() ERROR: " +err2.Error())
 	}	
+
+	logger.Info(" getAnalyticsInstancesById() --- Success \n")
 	return shim.Success(bufByte)
 
 	
@@ -545,23 +567,29 @@ func (t *DistributedDataAnalyticsChaincode) delateAnalyticsInstances(stub shim.C
 	logger.Info(" delateAnalyticsInstances()\n")
 
 	if len(args) != 2{
+		logger.Error(" delateAnalyticsInstances() ERROR --- \n")
 		return shim.Error("delateAnalyticsInstances() ERROR: wrong argument" )
 	}
 
 	DDAKey , err := getAnalyticsKey(stub, args[0], args[1])
 	if err != nil{
+		logger.Error(" CreateCompositeKey() ERROR --- \n")
 		return shim.Error("CreateCompositeKey() ERROR: " +err.Error())
 	}
 
 	err1 := stub.DelState(DDAKey)
 	if err1 != nil{
+		logger.Error(" DelState() ERROR --- \n")
 		return shim.Error("DelState() ERROR" +err1.Error()) 
 	}
 	stringEvent :=  "Analytics Instances deleted with key: " +DDAKey
 	err2 := setAnalytcsEvent(stub, stringEvent )
 	if err2 != nil{
+		logger.Error(" setEvent() ERROR --- \n")
 		return shim.Error(" setEvent() ERROR: " +err2.Error())
 	}	
+
+	logger.Info(" delateAnalyticsInstances() --- Success \n")
 	return shim.Success(nil)
 
 }
@@ -572,22 +600,24 @@ func (t *DistributedDataAnalyticsChaincode) updateAnalyticsInstances(stub shim.C
 	logger.Info(" updateAnalyticsInstances()\n")
 
 	if len(args) != 3{
+		logger.Error(" updateAnalyticsInstances() ERROR --- \n")
 		return shim.Error("updateAnalyticsInstances() ERROR: wrong argument")
 	}
 
 	DDAKey, err := getAnalyticsKey(stub, args[0], args[2])
 	if err != nil{
-			return shim.Error("CreateCompositeKey() ERROR: " +err.Error())
+		logger.Error(" CreateCompositeKey() ERROR --- \n")
+		return shim.Error("CreateCompositeKey() ERROR: " +err.Error())
 		}
-	
-
 	DDABytes, err1 := stub.GetState(DDAKey)
 	if err1 != nil{
+		logger.Error(" GetState() ERROR --- \n")
 		return shim.Error("GetState() ERROR: " +err1.Error())
 	}
 	
 	err2 := json.Unmarshal([]byte(DDABytes), &analytics)
 	if err2 != nil{
+		logger.Error(" json.Unmarshal() ERROR --- \n")
 		return shim.Error("json.Unmarshal() ERROR: " +err2.Error())
 	}
 
@@ -598,18 +628,21 @@ func (t *DistributedDataAnalyticsChaincode) updateAnalyticsInstances(stub shim.C
 	analytics.Payload = newPayload
 	err4 := stub.PutState(DDAKey, bufByte)
 	if err4 != nil{
+		logger.Error(" PutState() ERROR --- \n")
 		return shim.Error("PutState() ERROR: " +err4.Error())
 	}
 	jsonDDA, err3 := json.Marshal(&analytics)
-	if err3 != nil{
+	if err3 != nil{		
+		logger.Error(" json.Marshal() ERROR --- \n")
 		return shim.Error("json.Marshal() ERROR: " +err3.Error())
 	}
 	stringEvent := "updateAnalyticsInstances Event --- New payload :" +string(jsonDDA)
 	err0:= setAnalytcsEvent(stub, stringEvent)
-	if err0 != nil{
+	if err0 != nil{			
+		logger.Error(" setEvent() ERROR --- \n")
 		return shim.Error(" setEvent() ERROR: " +err0.Error())
 	}
-
+	logger.Info(" updateAnalyticsInstances() --- Success \n")
 	return shim.Success(nil)
 }
 
@@ -629,6 +662,7 @@ func (t *DistributedDataAnalyticsChaincode) createAnalyticsInstances(stub shim.C
 		bs := buf.Bytes()
 		err = json.Unmarshal(bs, &analytics)
 		if err != nil{
+			logger.Error(" json.Unmarshal() ERROR --- \n")
 			return shim.Error(" json.Unmarshal() ERROR: " +err.Error())
 		}else{
 			if (len(analytics.Id) == 0){
@@ -649,6 +683,7 @@ func (t *DistributedDataAnalyticsChaincode) createAnalyticsInstances(stub shim.C
 
 	DDAKey, err1 := getAnalyticsKey(stub, analyticsID, analytcsEGID)
 	if err1!= nil{
+		logger.Error(" PutState() ERROR --- \n")
 		return shim.Error("CreateCompositeKey() ERROR: " +err1.Error())
 	}
 
@@ -657,6 +692,7 @@ func (t *DistributedDataAnalyticsChaincode) createAnalyticsInstances(stub shim.C
 	bufByte := buf.Bytes()
 	err = stub.PutState(DDAKey, bufByte)
 	if err != nil{
+		logger.Error(" PutState() ERROR --- \n")
 		return shim.Error("PutState() ERROR: " +err.Error())
 	}
 
@@ -672,9 +708,10 @@ func (t *DistributedDataAnalyticsChaincode) createAnalyticsInstances(stub shim.C
 	stringEvent := "createAnalyticsInstances Event --- payload:" +string(jsonAnalytics)
 	err = setAnalytcsEvent(stub, stringEvent)
 	if err != nil{
+		logger.Error(" setEvent() ERROR --- \n")
 		return shim.Error(" setEvent() ERROR: " +err.Error())
 	}
-
+	logger.Info("createAnalyticsInstances() --- Success\n")
 	return shim.Success([]byte(jsonAnalytics))
 
 }

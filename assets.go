@@ -5,7 +5,7 @@ type AnalitycsInstances struct{
 	Id                       string `json:"id"`
 	Payload                  string `json:"payload"`
 	Egid					 string `json:"egid"`	
-	EdgeGateway				 		`json:"edgeGateway"`
+	//EdgeGateway				 		`json:"edgeGateway"`
 }
 
 type  DataSource struct {

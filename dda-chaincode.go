@@ -231,7 +231,7 @@ func (t *DistributedDataAnalyticsChaincode) deleteDataSources(stub shim.Chaincod
 	}
 func (t *DistributedDataAnalyticsChaincode) getDataSources(stub shim.ChaincodeStubInterface, isEnabled bool) pb.Response {
 	logger.Info(" getDataSources()\n")
-	var emptyArgs  []string{}
+	/* var emptyArgs  []string{}
 	var bufByte []byte
 	//var analytic *AnalitycsInstances
 	var dataArrayString  []string
@@ -257,12 +257,12 @@ func (t *DistributedDataAnalyticsChaincode) getDataSources(stub shim.ChaincodeSt
 	if err2 != nil{
 		return shim.Error(" setEvent() ERROR: " +err2.Error())
 	}	
-	return shim.Success(bufByte)
+	return shim.Success(bufByte) */
 
 }
 func (t *DistributedDataAnalyticsChaincode) getDataSourcesById(shim.ChaincodeStubInterface, isEnabled bool, args []string) {
 	logger.Info(" getDataSourcesById()\n")
-	var bufByte []byte
+	/*var bufByte []byte
 	//var analytic *AnalitycsInstances
 	var dataArrayString  []string
 	if len(args) != 1{
@@ -292,6 +292,7 @@ func (t *DistributedDataAnalyticsChaincode) getDataSourcesById(shim.ChaincodeStu
 		return shim.Error(" setEvent() ERROR: " +err2.Error())
 	}	
 	return shim.Success(bufByte)
+	*/
 }
 
 func (t *DistributedDataAnalyticsChaincode) createEdgeGateways(stub shim.ChaincodeStubInterface, isEnabled bool, args []string) pb.Response {
@@ -434,6 +435,7 @@ func (t *DistributedDataAnalyticsChaincode) deleteEdgeGateways(stub shim.Chainco
 func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstances(stub shim.ChaincodeStubInterface, isEnabled bool) pb.Response {
 
 	logger.Info(" getAnalyticsInstances()\n")
+	/*
 	var emptyArgs  []string
 	var bufByte []byte
 	//var analytic *AnalitycsInstances
@@ -463,11 +465,12 @@ func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstances(stub shim.Chai
 	}	
 	logger.Info(" getAnalyticsInstancesByIdByEgid() --- Success \n")
 	return shim.Success(bufByte)
-
+		*/
 	
 }
 func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstancesByIdByEgid(stub shim.ChaincodeStubInterface, isEnabled bool, args []string)pb.Response  {
 	logger.Info(" getAnalyticsInstancesByIdByEgid()\n")
+	/*
 	var dataArrayString  []string
 	var bufByte []byte
 
@@ -500,7 +503,7 @@ func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstancesByIdByEgid(stub
 	}	
 	logger.Info(" getAnalyticsInstancesByIdByEgid() --- Success \n")
 	return shim.Success(bufByte)
-
+	*/
 	
 }
 
@@ -508,6 +511,7 @@ func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstancesByIdByEgid(stub
 func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstancesById(stub shim.ChaincodeStubInterface, isEnabled bool, args []string) pb.Response  {
 
 	logger.Info(" getAnalyticsInstancesById()\n")
+	/*
 	var dataArrayString  []string
 	var bufByte []byte
 
@@ -545,7 +549,7 @@ func (t *DistributedDataAnalyticsChaincode) getAnalyticsInstancesById(stub shim.
 	logger.Info(" getAnalyticsInstancesById() --- Success \n")
 	return shim.Success(bufByte)
 
-	
+	/*
 	/* for( i=1, i<len(dataArrayBytes), i++){
 
 		payloadByte := dataArrayBytes[i]
